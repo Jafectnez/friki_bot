@@ -1,4 +1,5 @@
-requests
+flask
+Flask-RESTful
 python-telegram-bot
 gunicorn
 python-dotenv
