@@ -1,37 +1,27 @@
-import logging
-import requests
-import telegram
-import random
+"""
+app.py
 
-from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler
+Author: Allan Martínez
+"""
+from os import environ
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+from flask import Flask
+from flask_restful import Api
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+from bot import init_bot
 
-def start(update, context):
-    logger.info('Start command')
-    update.message.reply_text('Wazup, Soy el FrikiBot 2.0: Ahora es personal!')
+app = Flask(__name__)
+api = Api(app)
 
-def get_image(update, context):
-    logger.info('getImage command')
+@app.route("/")
+def hello():
+    """Root route.
 
-    image_number = random.randint(0, 19)
-    image_url = 'https://storage.googleapis.com/assets-friki-bot/ImagenesRandom/random{}.jpeg'.format(image_number)
-    
-    logger.info('sending image: {}'.format(image_url))
+    Returns:
+        Str: Simple hello world response
+    """
+    init_bot()
+    return "Bot Listening..."
 
-    context.bot.send_photo(chat_id=update.message.chat_id, photo=image_url)
-
-def init_bot():
-    logger.info('Init bot')
-    updater = Updater(token='596162081:AAEKkptlt5UxhxOEHKZ08sDyMOk8VB63Wak', use_context=True)
-    dispatcher = updater.dispatcher
-    
-    dispatcher.add_handler('start', start)
-    dispatcher.add_handler('meme', get_image)
-
-    updater.start_polling()
-    logger.info('Bot listening')
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=int(environ.get('PORT', 8080)))
