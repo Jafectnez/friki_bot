@@ -20,8 +20,9 @@ def hello():
     Returns:
         Str: Simple hello world response
     """
-    init_bot()
     return "Bot Listening..."
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=int(environ.get('PORT', 8080)))
+
+init_bot()
